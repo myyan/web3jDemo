@@ -31,7 +31,7 @@ public class WalletDemo {
     private void run() throws Exception {
         log.info("hello eth,hello web3j");
         ethClient();//连接以太坊客户端 connect to eth wallet
-//        createAccount();//创建冷钱包 generate cold wallet
+        createAccount();//创建冷钱包 generate cold wallet
         loadWallet();//加载钱包 load wallet
         getBalanceOfETH();//查询账户余额 query balance
         transferTo();//转账到指定地址 transfer to specific address
@@ -41,16 +41,12 @@ public class WalletDemo {
     /**
      * 以太坊客户端
      *
-     * @throws IOException
+     * @throws IOException  error
      */
     private void ethClient() throws IOException {
         //连接方式1：使用 infura 提供的客户端 use proxy
-        web3j = Web3j.build(new HttpService("https://ropsten.infura.io/Jj5m4mVrrHBYBH5hyDNc"));
-
         //连接方式2：使用本地客户端 use local client
-        //web3j = Web3j.build(new HttpService("127.0.0.1:7545"));
-        //测试是否连接成功 test if connect success
-
+        web3j = Web3j.build(new HttpService("https://ropsten.infura.io/Jj5m4mVrrHBYBH5hyDNc"));
         String web3ClientVersion = web3j.web3ClientVersion().send().getWeb3ClientVersion();
         log.info("version=" + web3ClientVersion);
     }
@@ -63,7 +59,6 @@ public class WalletDemo {
     private void createAccount() throws Exception {
         //钱包文件保持路径，请替换位自己的某文件夹路径
         final String walletPath = "./wallet";
-
         String walletFileName = WalletUtils.generateNewWalletFile("123456", new File(walletPath), false);
         log.info("walletName: " + walletFileName);
     }
@@ -72,7 +67,7 @@ public class WalletDemo {
     /**
      * load wallet 加载已有的钱包
      *
-     * @throws Exception
+     * @throws Exception error
      */
     private void loadWallet() throws Exception {
         //钱包路径
@@ -115,14 +110,15 @@ public class WalletDemo {
     /**
      * 查询地址以太坊余额
      *
-     * @throws IOException
+     * @throws IOException error
      */
     private void getBalanceOfETH() throws IOException {
 
         if (web3j == null) {
             return;
         }
-        String address = "0x2B2E9F0e9E3C08FeBDe9f498a0631135468edd53";//等待查询余额的地址
+        //等待查询余额的地址
+        String address = "0x2B2E9F0e9E3C08FeBDe9f498a0631135468edd53";
         //第二个参数：区块的参数，建议选最新区块
         EthGetBalance balance = web3j.ethGetBalance(address, DefaultBlockParameter.valueOf("latest")).send();
         //格式转化 wei-ether

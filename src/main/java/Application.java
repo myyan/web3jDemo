@@ -8,6 +8,7 @@
  * 5 部署合约
  * 6 读取&更新 智能合约的数据
  * 7 观察智能合约event
+ *
  * @author heiqie
  */
 public class Application {
