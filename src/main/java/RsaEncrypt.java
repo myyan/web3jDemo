@@ -1,4 +1,7 @@
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import java.security.KeyPair;
 import java.security.KeyPairGenerator;
 import java.security.interfaces.RSAPrivateKey;
@@ -13,6 +16,8 @@ import javax.crypto.Cipher;
  */
 public class RsaEncrypt {
 
+    private static final Logger log = LoggerFactory.getLogger(RsaEncrypt.class);
+
     public static void main(String[] args) {
         try {
             RsaEncrypt encrypt = new RsaEncrypt();
@@ -23,23 +28,24 @@ public class RsaEncrypt {
 
             // 获取公钥
             RSAPublicKey publicKey = (RSAPublicKey) keyPair.getPublic();
-            System.out.println("publicKey: " + publicKey);
+            log.info("publicKey:{}", publicKey);
             // 获取私钥
             RSAPrivateKey privateKey = (RSAPrivateKey) keyPair.getPrivate();
-            System.out.println("privateKey: " + privateKey);
+            log.info("privateKey:{}", privateKey);
 
             //获取加密后的数据
-            byte[] encryptedDate = encrypt.encrypt(publicKey, encryptText.getBytes());
+            byte[] encryptedData = encrypt.encrypt(publicKey, encryptText.getBytes());
             //打印加密后base64编码的数据
-            System.out.println("encryptedDate:  " + encrypt.bytesToString(encryptedDate));
+            log.info("encryptedData:{}", encrypt.bytesToString(encryptedData));
             //获取解密后的数据
-            byte[] decryptedDate = encrypt.decrypt(privateKey, encryptedDate);
+            byte[] decryptedData = encrypt.decrypt(privateKey, encryptedData);
             //打印解密后的内容
-            System.out.println(new String(decryptedDate));
+            System.out.println(new String(decryptedData));
             //打印解密后base64编码的数据
-            System.out.println("decryptedDate:  " + encrypt.bytesToString(decryptedDate));
+            log.info("decryptedData:{}", encrypt.bytesToString(decryptedData));
+
         } catch (Exception e) {
-            e.printStackTrace();
+            log.error("encountered error", e);
         }
     }
 

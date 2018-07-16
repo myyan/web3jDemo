@@ -24,12 +24,12 @@ public class WalletDemo {
     private Credentials credentials;
 
     public static void main(String[] args) throws Exception {
-        new WalletDemo().run();
+        new WalletDemo().web3jInit();
     }
 
 
-    private void run() throws Exception {
-        log.info("hello eth,hello web3j");
+    private void web3jInit() throws Exception {
+        log.info("init web3j");
         ethClient();//连接以太坊客户端 connect to eth wallet
         createAccount();//创建冷钱包 generate cold wallet
         loadWallet();//加载钱包 load wallet
@@ -41,26 +41,27 @@ public class WalletDemo {
     /**
      * 以太坊客户端
      *
-     * @throws IOException  error
+     * @throws IOException error
      */
     private void ethClient() throws IOException {
         //连接方式1：使用 infura 提供的客户端 use proxy
         //连接方式2：使用本地客户端 use local client
         web3j = Web3j.build(new HttpService("https://ropsten.infura.io/Jj5m4mVrrHBYBH5hyDNc"));
         String web3ClientVersion = web3j.web3ClientVersion().send().getWeb3ClientVersion();
-        log.info("version=" + web3ClientVersion);
+        log.info("version:{}", web3ClientVersion);
     }
 
 
     /**
      * generate wallet
+     *
      * @throws Exception error
      */
     private void createAccount() throws Exception {
         //钱包文件保持路径，请替换位自己的某文件夹路径
         final String walletPath = "./wallet";
         String walletFileName = WalletUtils.generateNewWalletFile("123456", new File(walletPath), false);
-        log.info("walletName: " + walletFileName);
+        log.info("walletName:{}", walletFileName);
     }
 
 
@@ -78,9 +79,9 @@ public class WalletDemo {
         BigInteger publicKey = credentials.getEcKeyPair().getPublicKey();
         BigInteger privateKey = credentials.getEcKeyPair().getPrivateKey();
 
-        log.info("address=" + address);
-        log.info("public key=" + publicKey);
-        log.info("private key=" + privateKey);
+        log.info("address:{}", address);
+        log.info("public key:{}", publicKey);
+        log.info("private key:{}", privateKey);
     }
 
     /**
@@ -99,12 +100,12 @@ public class WalletDemo {
         String addressTo = "0x41F1dcbC0794BAD5e94c6881E7c04e4F98908a87";
         TransactionReceipt send = Transfer.sendFunds(web3j, credentials, addressTo, BigDecimal.ONE, Convert.Unit.FINNEY).send();
 
-        log.info("Transaction complete:");
-        log.info("trans hash=" + send.getTransactionHash());
-        log.info("from :" + send.getFrom());
-        log.info("to:" + send.getTo());
-        log.info("gas used=" + send.getGasUsed());
-        log.info("status: " + send.getStatus());
+        log.info("Transaction complete");
+        log.info("trans hash:{}", send.getTransactionHash());
+        log.info("from :{}", send.getFrom());
+        log.info("to:{}", send.getTo());
+        log.info("gas used:{}", send.getGasUsed());
+        log.info("status:{} ", send.getStatus());
     }
 
     /**
